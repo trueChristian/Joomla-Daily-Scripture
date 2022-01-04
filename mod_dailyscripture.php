@@ -14,7 +14,7 @@
 	@created		22nd October, 2015
 	@package		Sermon Distributor
 	@subpackage		mod_dailyscripture.php
-	@author			Llewellyn van der Merwe <https://truechristian.church/>	
+	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
 	@copyright		Copyright (C) 2015. All Rights Reserved
 	@license		GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html 
 

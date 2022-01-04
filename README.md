@@ -4,9 +4,9 @@ Display the daily scripture from [https://github.com/trueChristian/daily-scriptu
 
 # Build Details
 
-+ *Company*: [a True Christian Church](https://truechristian.church/)
-+ *Author*: [Llewellyn van der Merwe](mailto:info+joomla@truechristian.church)
-+ *Name*: [Dailyscripture](https://truechristian.church/)
++ *Company*: [Vast Development Method](https://www.vdm.io/)
++ *Author*: [Llewellyn van der Merwe](mailto:joomla@vdm.io)
++ *Name*: [Dailyscripture](https://www.vdm.io/)
 + *First Build*: 22nd October, 2015
 + *Last Build*: 4th January, 2022
 + *Version*: 1.0.0
