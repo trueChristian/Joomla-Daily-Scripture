@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="4" client="site" method="upgrade">
+	<name>MOD_DAILYSCRIPTURE</name>
+	<creationDate>4th January, 2022</creationDate>
+	<author>Llewellyn van der Merwe</author>
+	<authorEmail>info+joomla@truechristian.church</authorEmail>
+	<authorUrl>https://truechristian.church/</authorUrl>
+	<copyright>Copyright (C) 2015. All Rights Reserved</copyright>
+	<license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
+	<version>1.0.0</version>
+	<description>MOD_DAILYSCRIPTURE_XML_DESCRIPTION</description>
+
+	<!-- Language files -->
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.mod_dailyscripture.ini</language>
+		<language tag="en-GB">en-GB/en-GB.mod_dailyscripture.sys.ini</language>
+	</languages>
+
+	<!-- Model files -->
+	<files>
+		<filename module="mod_dailyscripture">mod_dailyscripture.php</filename>
+		<filename>helper.php</filename>
+		<filename>index.html</filename>
+		<folder>language</folder>
+		<folder>fields</folder>
+		<folder>rules</folder>
+		<folder>tmpl</folder>
+	</files>
+
+	<!-- Config parameter -->
+	<config>
+	<fields name="params">
+	<!-- default paths of basic fieldset points to the module -->
+	<fieldset name="basic" label="basic"
+		addrulepath="/modules/mod_dailyscripture/rules"
+		addfieldpath="/modules/mod_dailyscripture/fields"
+	>
+		<!-- Link Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="link"
+			label="MOD_DAILYSCRIPTURE_LINK_LABEL"
+			description="MOD_DAILYSCRIPTURE_LINK_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="1">
+			<!-- Option Set. -->
+			<option value="1">
+				MOD_DAILYSCRIPTURE_YES</option>
+			<option value="0">
+				MOD_DAILYSCRIPTURE_NO</option>
+		</field>
+	</fieldset>
+	</fields>
+	</config>
+</extension>
