@@ -19,6 +19,7 @@
 	<!-- Model files -->
 	<files>
 		<filename module="mod_dailyscripture">mod_dailyscripture.php</filename>
+		<filename>README.md</filename>
 		<filename>helper.php</filename>
 		<filename>index.html</filename>
 		<folder>language</folder>
