@@ -37,8 +37,11 @@ defined('_JEXEC') or die('Restricted access');
 	<?php if ($params->get('link', 1) == 1): ?>
 		<a href="https://t.me/s/<?php echo $today->telegram; ?>" target="_blank"><?php echo $today->date; ?></a>
 	<?php else: ?>
+		<br />
 		<?php echo $today->date; ?>
 	<?php endif; ?>
+<?php elseif ($params->get('type', 1) == 2 && $today->telegram): ?>
+	<?php echo $today->telegram; ?>
 <?php else: ?>
 	<?php echo JText::_('MOD_DAILYSCRIPTURE_THERE_WAS_AN_ERROR_PLEASE_TRY_AGAIN_LATTER'); ?>
 <?php endif; ?>

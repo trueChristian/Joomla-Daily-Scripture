@@ -30,12 +30,44 @@ use Joomla\Registry\Registry;
 class ModDailyScriptureHelper
 {
 	/**
-	 * Scripture
+	 * Params
 	 *
-	 * @var   array
+	 * @var   Registry
 	 * @since  1.0
 	 */
-	protected $scripture;
+	protected $params;
+
+	/**
+	 * Scripture
+	 *
+	 * @var   mix
+	 * @since  1.0
+	 */
+	protected $scripture = null;
+
+	/**
+	 * Type
+	 *
+	 * @var   int
+	 * @since  1.0
+	 */
+	protected $type;
+
+	/**
+	 * Telegram ID = Date
+	 *
+	 * @var   int
+	 * @since  1.0
+	 */
+	protected $telegramID = 440;
+
+	/**
+	 * Telegram Date = ID
+	 *
+	 * @var   int
+	 * @since  1.0
+	 */
+	protected $telegramDate = 1640995200;
 
 	/**
 	 * Constructor.
@@ -46,12 +78,25 @@ class ModDailyScriptureHelper
 	 */
 	public function __construct(Registry $params = null)
 	{
+		// set the global params
+		$this->params = $params;
 		// get the version
-		$version = $params->get('version', 'kjv');
-		// the link to the scripture for the day
-		$path = "https://raw.githubusercontent.com/trueChristian/daily-scripture/master/scripture/$version/README.json";
-		// get the scripture object
-		$this->scripture = $this->getFileContents($path);
+		$this->type = $params->get('type', 1);
+		// implementation type = 1 = gitHub
+		if ($this->type == 1)
+		{
+			// get the version
+			$version = $params->get('version', 'kjv');
+			// the link to the scripture for the day
+			$path = "https://raw.githubusercontent.com/trueChristian/daily-scripture/master/scripture/$version/README.json";
+			// get the scripture object
+			$this->scripture = $this->getFileContents($path);
+		}
+		// implementation type = 2 = Telegram
+		elseif ($this->type == 2)
+		{
+			$this->setTelegram();
+		}
 	}
 
 	/**
@@ -65,11 +110,191 @@ class ModDailyScriptureHelper
 	 */
 	public function __get($name)
 	{
-		if ($this->checkScripture($name))
+		if ($this->type == 1 && $this->checkScripture($name))
 		{
 			return $this->scripture->{$name};
 		}
+		elseif ($this->type == 2 && $name === 'telegram' && isset($this->telegram))
+		{
+			return $this->telegram;
+		}
 		return null;
+	}
+
+	/**
+	 * get the Telegram script
+	 *
+	 * @return  string  data-color values
+	 *
+	 * @since   1.0
+	 */
+	protected function setTelegram()
+	{
+		// get today
+		$today = time();
+		// get the difference
+		$difference = $today - $this->telegramDate;
+		// get the number of days
+		$days = round($difference / (60 * 60 * 24));
+		// add the days
+		$day = $this->telegramID + $days;
+		// validate the ID
+		if (($id = $this->validateID($day)) > 0)
+		{
+			// get the width
+			$width = $this->params->get('width', 100);
+			// get the color
+			$color = $this->getColor();
+			// get the userpic
+			$userpic = $this->getUserPic();
+			// get the dark theme
+			$dark = $this->getDarkTheme();
+			// set the script
+			$this->telegram = "<script async src=\"https://telegram.org/js/telegram-widget.js?15\" data-telegram-post=\"daily_scripture/$id\" data-width=\"$width%\"${color}${userpic}${dark}></script>";
+		}
+	}
+
+	/**
+	 * validate the current ID of the post
+	 *
+	 * @return  int the post ID
+	 *
+	 * @since   1.0
+	 */
+	protected function validateID($id)
+	{
+		// url to post
+		$post_url = "https://t.me/daily_scripture/$id?embed=1";
+		// try to get post (painful work around because of an ugly API)
+		if (($post = $this->getFileContents($post_url, false)) !== false && strpos($post, 'tgme_widget_message_error') === false)
+		{
+			return $id;
+		}
+		// try again
+		if ($id > 0)
+		{
+			return $this->validateID(--$id);
+		}
+		return 0;
+	}
+
+	/**
+	 * get the color
+	 *
+	 * @return  string  The telegram script
+	 *
+	 * @since   1.0
+	 */
+	protected function getColor()
+	{
+		// get the color
+		$color = $this->params->get('color', 1);
+		// convert to color
+		switch($color)
+		{
+			case 2:
+				// Cyan
+				$color = '13B4C6';
+				$dark_color = '39C4E8';
+			break;
+			case 3:
+				// Green
+				$color = '29B127';
+				$dark_color = '72E350';
+			break;
+			case 4:
+				// Yellow
+				$color = 'CA9C0E';
+				$dark_color = 'F0B138';
+			break;
+			case 5:
+				// Red
+				$color = 'E22F38';
+				$dark_color = 'F95C54';
+			break;
+			case 6:
+				// White
+				$color = '343638';
+				$dark_color = 'FFFFFF';
+			break;
+			case 7:
+				// custom color
+				$color = strtoupper(trim($this->params->get('custom_color', 'F646A4'), '#'));
+				$dark_color = null;
+			break;
+			default:
+				// default
+				$color = null;
+				$dark_color = null;
+			break;
+		}
+		// load colors if set
+		if ($color)
+		{
+			$color = " data-color=\"$color\"";
+			// load dark color if set
+			if ($dark_color)
+			{
+				$color = "$color data-dark-color=\"$dark_color\"";
+			}
+			return $color;
+		}
+		return '';
+	}
+
+	/**
+	 * get the user pic state
+	 *
+	 * @return  string data-userpic value
+	 *
+	 * @since   1.0
+	 */
+	protected function getUserPic()
+	{
+		// get the author_photo
+		$author_photo = $this->params->get('author_photo', 1);
+		// convert to userpic
+		switch($author_photo)
+		{
+			case 2:
+				// Always show
+				$userpic = 'true';
+			break;
+			case 3:
+				// Always hide
+				$userpic = 'false';
+			break;
+			default:
+				// Auto
+				$userpic = null;
+			break;
+		}
+		// load userpic if set
+		if ($userpic)
+		{
+			$userpic = " data-userpic=\"$userpic\"";
+			return $userpic;
+		}
+		return '';
+	}
+
+	/**
+	 * get the dark theme state
+	 *
+	 * @return  string data-dark value
+	 *
+	 * @since   1.0
+	 */
+	protected function getDarkTheme()
+	{
+		// get the theme
+		$theme = $this->params->get('theme', 1);
+		// only load if dark theme is set
+		if ($theme == 2)
+		{
+			return  " data-dark=\"1\"";
+		}
+		return '';
 	}
 
 	/**
@@ -81,15 +306,22 @@ class ModDailyScriptureHelper
 	 *
 	 * @since  1.0
 	 */
-	protected function getFileContents($path)
+	protected function getFileContents($path, $json = true)
 	{
 		// use basic file get content for now
 		if (($content = @file_get_contents($path)) !== FALSE)
 		{
 			// return if found
-			if ($this->checkJson($content))
+			if ($json)
 			{
-				return json_decode($content);
+				if ($this->checkJson($content))
+				{
+					return json_decode($content);
+				}
+			}
+			elseif ($this->checkString($content))
+			{
+				return $content;
 			}
 		}
 		// use curl if available
@@ -110,9 +342,16 @@ class ModDailyScriptureHelper
 			// close the connection
 			curl_close($ch);
 			// return if found
-			if ($this->checkJson($content))
+			if ($json)
 			{
-				return json_decode($content);
+				if ($this->checkJson($content))
+				{
+					return json_decode($content);
+				}
+			}
+			elseif ($this->checkString($content))
+			{
+				return $content;
 			}
 		}
 		return false;
