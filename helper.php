@@ -26,6 +26,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\Registry\Registry;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
 
 class ModDailyScriptureHelper
 {
@@ -62,12 +64,12 @@ class ModDailyScriptureHelper
 	protected $telegramID = 440;
 
 	/**
-	 * Telegram Date = ID
+	 * Telegram Date of the telegramID
 	 *
-	 * @var   int
+	 * @var   string
 	 * @since  1.0
 	 */
-	protected $telegramDate = 1640995200;
+	protected $telegramDate = 'Saturday 01 January, 2022';
 
 	/**
 	 * Constructor.
@@ -131,15 +133,17 @@ class ModDailyScriptureHelper
 	protected function setTelegram()
 	{
 		// get today
-		$today = time();
+		$today = $this->getTimeStamp();
+		// get the telegram date
+		$telegram_date = $this->getTimeStamp($this->telegramDate);
 		// get the difference
-		$difference = $today - $this->telegramDate;
-		// get the number of days
-		$days = round($difference / (60 * 60 * 24));
+		$difference = $today - $telegram_date;
+		// get the number of days (plus one of the current date)
+		$days = round($difference / 86400) + 1;
 		// add the days
-		$day = $this->telegramID + $days;
+		$id = $this->telegramID + $days;
 		// validate the ID
-		if (($id = $this->validateID($day)) > 0)
+		if ($id > 0)
 		{
 			// get the width
 			$width = $this->params->get('width', 100);
@@ -155,27 +159,22 @@ class ModDailyScriptureHelper
 	}
 
 	/**
-	 * validate the current ID of the post
+	 * get today's time stamp based on user
 	 *
-	 * @return  int the post ID
+	 * @return  int the timestamp
 	 *
 	 * @since   1.0
 	 */
-	protected function validateID($id)
+	protected function getTimeStamp($getDate = 'now')
 	{
-		// url to post
-		$post_url = "https://t.me/daily_scripture/$id?embed=1";
-		// try to get post (painful work around because of an ugly API)
-		if (($post = $this->getFileContents($post_url, false)) !== false && strpos($post, 'tgme_widget_message_error') === false)
-		{
-			return $id;
-		}
-		// try again
-		if ($id > 0)
-		{
-			return $this->validateID(--$id);
-		}
-		return 0;
+		// get today's date
+		$date = new Date($getDate);
+		// get the user time zone
+		$timezone = Factory::getUser()->getTimezone();
+		// update the date to the users time zone
+		$date->setTimezone($timezone);
+		// return the time stamp
+		return $date->toUnix();
 	}
 
 	/**
