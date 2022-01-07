@@ -42,7 +42,7 @@ class ModDailyScriptureHelper
 	/**
 	 * Scripture
 	 *
-	 * @var   mix
+	 * @var   mixed
 	 * @since  1.0
 	 */
 	protected $scripture = null;
@@ -74,30 +74,34 @@ class ModDailyScriptureHelper
 	/**
 	 * Constructor.
 	 *
-	 * @param   Registry  $params the module settings
+	 * @param   Registry|null  $params  the module settings
 	 *
 	 * @since   1.0
 	 */
 	public function __construct(Registry $params = null)
 	{
-		// set the global params
-		$this->params = $params;
-		// get the version
-		$this->type = $params->get('type', 1);
-		// implementation type = 1 = gitHub
-		if ($this->type == 1)
+		// we must have the params or we cant continue
+		if ($params)
 		{
+			// set the global params
+			$this->params = $params;
 			// get the version
-			$version = $params->get('version', 'kjv');
-			// the link to the scripture for the day
-			$path = "https://raw.githubusercontent.com/trueChristian/daily-scripture/master/scripture/$version/README.json";
-			// get the scripture object
-			$this->scripture = $this->getFileContents($path);
-		}
-		// implementation type = 2 = Telegram
-		elseif ($this->type == 2)
-		{
-			$this->setTelegram();
+			$this->type = $params->get('type', 1);
+			// implementation type = 1 = gitHub
+			if ($this->type == 1)
+			{
+				// get the version
+				$version = $params->get('version', 'kjv');
+				// the link to the scripture for the day
+				$path = "https://raw.githubusercontent.com/trueChristian/daily-scripture/master/scripture/$version/README.json";
+				// get the scripture object
+				$this->scripture = $this->getFileContents($path);
+			}
+			// implementation type = 2 = Telegram
+			elseif ($this->type == 2)
+			{
+				$this->setTelegram();
+			}
 		}
 	}
 
@@ -126,7 +130,7 @@ class ModDailyScriptureHelper
 	/**
 	 * get the Telegram script
 	 *
-	 * @return  string  data-color values
+	 * @return  void
 	 *
 	 * @since   1.0
 	 */
@@ -160,6 +164,8 @@ class ModDailyScriptureHelper
 
 	/**
 	 * get today's time stamp based on user
+	 *
+	 * @param   string  $getDate  the string to get the time stamp for
 	 *
 	 * @return  int the timestamp
 	 *

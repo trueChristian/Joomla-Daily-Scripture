@@ -8,7 +8,7 @@ Display the daily scripture from [https://github.com/trueChristian/daily-scriptu
 + *Author*: [Llewellyn van der Merwe](mailto:joomla@vdm.io)
 + *Name*: [Dailyscripture](https://www.vdm.io/)
 + *First Build*: 22nd October, 2015
-+ *Last Build*: 6th January, 2022
++ *Last Build*: 7th January, 2022
 + *Version*: 1.0.1
 + *Copyright*: Copyright (C) 2015. All Rights Reserved
 + *License*: GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
