@@ -10,7 +10,7 @@
 
 /------------------------------------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.x
+	@version		2.1.x
 	@created		22nd October, 2015
 	@package		Sermon Distributor
 	@subpackage		default.php
@@ -37,11 +37,16 @@ defined('_JEXEC') or die('Restricted access');
 	<?php if ($params->get('link', 1) == 1): ?>
 		<a href="https://t.me/s/<?php echo $today->telegram; ?>" target="_blank"><?php echo $today->date; ?></a>
 	<?php else: ?>
-		<br />
-		<?php echo $today->date; ?>
+		<p><?php echo $today->date; ?></p>
+	<?php endif; ?>
+	<?php if ($today->comments): ?>
+		<?php echo $today->comments; ?>
 	<?php endif; ?>
 <?php elseif ($params->get('type', 1) == 2 && $today->telegram): ?>
 	<?php echo $today->telegram; ?>
+	<?php if ($today->comments): ?>
+		<?php echo $today->comments; ?>
+	<?php endif; ?>
 <?php else: ?>
-	<?php echo JText::_('MOD_DAILYSCRIPTURE_THERE_WAS_AN_ERROR_PLEASE_TRY_AGAIN_LATTER'); ?>
+	<?php echo JText::_('MOD_DAILYSCRIPTURE_THERE_WAS_AN_ERROR_LOADING_THE_DAILY_SCRIPTURE_PLEASE_TRY_AGAIN_LATTER'); ?>
 <?php endif; ?>

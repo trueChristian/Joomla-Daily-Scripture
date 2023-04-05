@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="4" client="site" method="upgrade">
 	<name>MOD_DAILYSCRIPTURE</name>
-	<creationDate>7th January, 2022</creationDate>
+	<creationDate>5th April, 2023</creationDate>
 	<author>Llewellyn van der Merwe</author>
 	<authorEmail>joomla@vdm.io</authorEmail>
 	<authorUrl>https://www.vdm.io/</authorUrl>
 	<copyright>Copyright (C) 2015. All Rights Reserved</copyright>
 	<license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
-	<version>1.0.1</version>
+	<version>1.1.4</version>
 	<description>MOD_DAILYSCRIPTURE_XML_DESCRIPTION</description>
+
+	<!-- Scripts to run on installation -->
+	<scriptfile>script.php</scriptfile>
 
 	<!-- Language files -->
 	<languages folder="language">
@@ -29,7 +32,10 @@
 	</files>
 
 	<!-- Config parameter -->
-	<config>
+	<config
+		addrulepath="/administrator/components/com_sermondistributor/models/rules"
+		addfieldpath="/administrator/components/com_sermondistributor/models/fields"
+	>
 	<fields name="params">
 	<!-- default paths of basic fieldset points to the module -->
 	<fieldset name="basic" label="basic"
@@ -51,6 +57,57 @@
 			<option value="2">
 				MOD_DAILYSCRIPTURE_DIRECT_FROM_TELEGRAM</option>
 		</field>
+		<!-- Show_comments Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="show_comments"
+			label="MOD_DAILYSCRIPTURE_SHOW_COMMENTS_LABEL"
+			description="MOD_DAILYSCRIPTURE_SHOW_COMMENTS_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0">
+			<!-- Option Set. -->
+			<option value="1">
+				MOD_DAILYSCRIPTURE_YES</option>
+			<option value="0">
+				MOD_DAILYSCRIPTURE_NO</option>
+		</field>
+		<!-- Comments_limit Field. Type: Number. (joomla) -->
+		<field
+			type="number"
+			name="comments_limit"
+			label="MOD_DAILYSCRIPTURE_COMMENTS_LIMIT_LABEL"
+			class="text_area"
+			min="1"
+			max="20"
+			step="1"
+			showon="show_comments:1"
+		/>
+		<!-- Comments_colorful Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="comments_colorful"
+			label="MOD_DAILYSCRIPTURE_COMMENTS_COLORFUL_LABEL"
+			class="btn-group btn-group-yesno"
+			default="0"
+			showon="show_comments:1">
+			<!-- Option Set. -->
+			<option value="1">
+				MOD_DAILYSCRIPTURE_YES</option>
+			<option value="0">
+				MOD_DAILYSCRIPTURE_NO</option>
+		</field>
+		<!-- Comments_height Field. Type: Number. (joomla) -->
+		<field
+			type="number"
+			name="comments_height"
+			label="MOD_DAILYSCRIPTURE_COMMENTS_HEIGHT_LABEL"
+			description="MOD_DAILYSCRIPTURE_COMMENTS_HEIGHT_DESCRIPTION"
+			class="text_area"
+			min="300"
+			max="2000"
+			step="10"
+			showon="show_comments:1"
+		/>
 		<!-- Link Field. Type: Radio. (joomla) -->
 		<field
 			type="radio"
@@ -71,7 +128,6 @@
 			type="number"
 			name="width"
 			label="MOD_DAILYSCRIPTURE_WIDTH_LABEL"
-			default="100"
 			class="text_area"
 			min="10"
 			max="100"
@@ -103,7 +159,7 @@
 			class="list_class"
 			multiple="false"
 			default="1"
-			showon="type:2">
+			showon="type:2[OR]show_comments:1">
 			<!-- Option Set. -->
 			<option value="1">
 				MOD_DAILYSCRIPTURE_DEFAULT</option>
@@ -126,7 +182,7 @@
 			name="custom_color"
 			default="1"
 			label="MOD_DAILYSCRIPTURE_CUSTOM_COLOR_LABEL"
-			showon="type:2[AND]color:7"
+			showon="type:2[AND]color:7[OR]show_comments:1[AND]color:7"
 		/>
 		<!-- Theme Field. Type: Radio. (joomla) -->
 		<field
@@ -135,13 +191,17 @@
 			label="MOD_DAILYSCRIPTURE_THEME_LABEL"
 			class="btn-group btn-group-yesno"
 			default="1"
-			showon="type:2">
+			showon="type:2[OR]show_comments:1">
 			<!-- Option Set. -->
 			<option value="1">
 				MOD_DAILYSCRIPTURE_LIGHT_THEME</option>
 			<option value="2">
 				MOD_DAILYSCRIPTURE_DARK_THEME</option>
 		</field>
+	</fieldset>
+	<fieldset name="info" label="MOD_DAILYSCRIPTURE_DAILY_SCRIPTURE">
+		<!-- Daily_scripture_note Field. Type: Note. A None Database Field. (joomla) -->
+		<field type="note" name="daily_scripture_note" label="MOD_DAILYSCRIPTURE_DAILY_SCRIPTURE_NOTE_LABEL" description="MOD_DAILYSCRIPTURE_DAILY_SCRIPTURE_NOTE_DESCRIPTION" heading="h4" class="alert alert-success daily_scripture_note" />
 	</fieldset>
 	</fields>
 	</config>

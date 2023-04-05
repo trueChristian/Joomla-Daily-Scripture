@@ -10,7 +10,7 @@
 
 /------------------------------------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.x
+	@version		2.1.x
 	@created		22nd October, 2015
 	@package		Sermon Distributor
 	@subpackage		helper.php
@@ -26,8 +26,6 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\Registry\Registry;
-use Joomla\CMS\Date\Date;
-use Joomla\CMS\Factory;
 
 class ModDailyScriptureHelper
 {
@@ -37,7 +35,15 @@ class ModDailyScriptureHelper
 	 * @var   Registry
 	 * @since  1.0
 	 */
-	protected $params;
+	protected Registry $params;
+
+	/**
+	 * The Translation Version
+	 *
+	 * @var   string
+	 * @since  1.1
+	 */
+	protected string $version;
 
 	/**
 	 * Scripture
@@ -48,28 +54,36 @@ class ModDailyScriptureHelper
 	protected $scripture = null;
 
 	/**
+	 * Telegram Scripture
+	 *
+	 * @var   string
+	 * @since  1.1
+	 */
+	protected string $telegram = '';
+
+	/**
+	 * Telegram Comments
+	 *
+	 * @var   string
+	 * @since  1.1
+	 */
+	protected string $comments = '';
+
+	/**
 	 * Type
 	 *
 	 * @var   int
 	 * @since  1.0
 	 */
-	protected $type;
+	protected int $type;
 
 	/**
-	 * Telegram ID = Date
+	 * The Telegram Post ID
 	 *
 	 * @var   int
-	 * @since  1.0
+	 * @since  1.1
 	 */
-	protected $telegramID = 440;
-
-	/**
-	 * Telegram Date of the telegramID
-	 *
-	 * @var   string
-	 * @since  1.0
-	 */
-	protected $telegramDate = 'Saturday 01 January, 2022';
+	protected int $id = 0;
 
 	/**
 	 * Constructor.
@@ -87,22 +101,43 @@ class ModDailyScriptureHelper
 			$this->params = $params;
 			// get the version
 			$this->type = $params->get('type', 1);
+			// get the version
+			$this->version = $params->get('version', 'kjv');
+
 			// implementation type = 1 = gitHub
 			if ($this->type == 1)
 			{
-				// get the version
-				$version = $params->get('version', 'kjv');
 				// the link to the scripture for the day
-				$path = "https://raw.githubusercontent.com/trueChristian/daily-scripture/master/scripture/$version/README.json";
+				$path = "https://raw.githubusercontent.com/trueChristian/daily-scripture/master/scripture/{$this->version}/README.json";
 				// get the scripture object
 				$this->scripture = $this->getFileContents($path);
 			}
-			// implementation type = 2 = Telegram
-			elseif ($this->type == 2)
+		}
+	}
+
+	/**
+	 * get the Telegram Post ID
+	 *
+	 * @return  int
+	 * @since   1.1
+	 */
+	protected function getId(): int
+	{
+		if ($this->id == 0)
+		{
+			// the link to the scripture for the day
+			$path = "https://raw.githubusercontent.com/trueChristian/daily-scripture/master/scripture/{$this->version}/README.tg.id";
+			// get the scripture object
+			$id = trim($this->getFileContents($path, false));
+
+			// make sure we have a number here
+			if (is_numeric($id))
 			{
-				$this->setTelegram();
+				$this->id = (int) $id;
 			}
 		}
+
+		return $this->id;
 	}
 
 	/**
@@ -111,24 +146,45 @@ class ModDailyScriptureHelper
 	 * @param   mixed  $name  Name of the value to retrieve.
 	 *
 	 * @return  mixed  The request value
-	 *
 	 * @since   1.0
 	 */
-	public function __get($name)
+	public function __get($key)
 	{
-		if ($this->type == 1 && $this->checkScripture($name))
+		if ($this->type == 1 && $this->checkScripture($key))
 		{
-			return $this->scripture->{$name};
+			return $this->scripture->{$key};
 		}
-		elseif ($this->type == 2 && $name === 'telegram' && isset($this->telegram))
+		elseif ($this->type == 2 && $key === 'telegram')
 		{
-			return $this->telegram;
+			return $this->getTelegram();
 		}
+		elseif ($key === 'comments')
+		{
+			return $this->getComments();
+		}
+
 		return null;
 	}
 
 	/**
 	 * get the Telegram script
+	 *
+	 * @return  string|null
+	 *
+	 * @since   1.1
+	 */
+	protected function getTelegram(): ?string
+	{
+		if (empty($this->telegram))
+		{
+			$this->setTelegram();
+		}
+
+		return $this->checkString($this->telegram) ? $this->telegram : null;
+	}
+
+	/**
+	 * set the Telegram script
 	 *
 	 * @return  void
 	 *
@@ -136,51 +192,106 @@ class ModDailyScriptureHelper
 	 */
 	protected function setTelegram()
 	{
-		// get today
-		$today = $this->getTimeStamp();
-		// get the telegram date
-		$telegram_date = $this->getTimeStamp($this->telegramDate);
-		// get the difference
-		$difference = $today - $telegram_date;
-		// get the number of days (plus one of the current date)
-		$days = round($difference / 86400) + 1;
-		// add the days
-		$id = $this->telegramID + $days;
 		// validate the ID
-		if ($id > 0)
+		if (($id = $this->getId()) > 0)
 		{
-			// get the width
-			$width = $this->params->get('width', 100);
 			// get the color
 			$color = $this->getColor();
-			// get the userpic
-			$userpic = $this->getUserPic();
+
 			// get the dark theme
 			$dark = $this->getDarkTheme();
+
+			// get the width
+			$width = $this->params->get('width', 100);
+
+			// get the userpic
+			$userpic = $this->getUserPic();
+
 			// set the script
-			$this->telegram = "<script async src=\"https://telegram.org/js/telegram-widget.js?15\" data-telegram-post=\"daily_scripture/$id\" data-width=\"$width%\"${color}${userpic}${dark}></script>";
+			$this->telegram = "<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-post=\"daily_scripture/$id\" data-width=\"$width%\"${color}${userpic}${dark}></script>";
 		}
 	}
 
 	/**
-	 * get today's time stamp based on user
+	 * get the Telegram Comment script
 	 *
-	 * @param   string  $getDate  the string to get the time stamp for
+	 * @return  string|null
 	 *
-	 * @return  int the timestamp
-	 *
-	 * @since   1.0
+	 * @since   1.1
 	 */
-	protected function getTimeStamp($getDate = 'now')
+	protected function getComments(): ?string
 	{
-		// get today's date
-		$date = new Date($getDate);
-		// get the user time zone
-		$timezone = Factory::getUser()->getTimezone();
-		// update the date to the users time zone
-		$date->setTimezone($timezone);
-		// return the time stamp
-		return $date->toUnix();
+		if (empty($this->comments))
+		{
+			$this->setComments();
+		}
+
+		return $this->checkString($this->comments) ? $this->comments : null;
+	}
+
+	/**
+	 * set the Telegram script
+	 *
+	 * @return  void
+	 *
+	 * @since   1.1
+	 */
+	protected function setComments()
+	{
+		// should we add comments
+		if (($id = $this->getId()) > 0 && $this->params->get('show_comments', 0) == 1)
+		{
+			// get the color
+			$color = $this->getColor();
+
+			// get the dark theme
+			$dark = $this->getDarkTheme();
+
+			// get comment limit
+			$limit = $this->params->get('comments_limit', 5);
+
+			// get comment Height
+			$height = $this->getCommentHeight();
+
+			// get color ful switch
+			$colorful = $this->getCommentColorful();
+
+			// set the script
+			$this->comments = "<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-discussion=\"daily_scripture/$id\" data-comments-limit=\"$limit\"${colorful}${height}${color}${dark}></script>";
+		}
+	}
+
+	/**
+	 * get the comment height
+	 *
+	 * @return  string height value
+	 *
+	 * @since   1.1
+	 */
+	protected function getCommentHeight()
+	{
+		if (($height = $this->params->get('comments_height')) > 300)
+		{
+			return " data-height=\"$height\"";
+		}
+
+		return '';
+	}
+
+	/**
+	 * get the comment color ful switch
+	 *
+	 * @return  string height value
+	 *
+	 * @since   1.1
+	 */
+	protected function getCommentColorful()
+	{
+		if (($colorful = $this->params->get('comments_colorful', 0)) == 1)
+		{
+			return " data-colorful=\"1\"";
+		}
+		return '';
 	}
 
 	/**
@@ -307,7 +418,7 @@ class ModDailyScriptureHelper
 	 *
 	 * @input	string $path   The path to get remotely 
 	 *
-	 * @returns object on success
+	 * @returns mixed on success
 	 *
 	 * @since  1.0
 	 */
@@ -359,7 +470,8 @@ class ModDailyScriptureHelper
 				return $content;
 			}
 		}
-		return false;
+
+		return null;
 	}
 
 	/**
