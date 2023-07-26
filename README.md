@@ -1,15 +1,17 @@
-# Dailyscripture (1.1.4)
+# Dailyscripture (1.1.5)
 
-Display the daily scripture from [https://github.com/trueChristian/daily-scripture](https://github.com/trueChristian/daily-scripture).
+Display the daily scripture from [https://git.vdm.dev/christian/daily-scripture](https://git.vdm.dev/christian/daily-scripture).
+
+> Support can be found at our [community support area](https://git.vdm.dev/getBible/support).
 
 # Build Details
 
-+ *Company*: [Vast Development Method](https://www.vdm.io/)
++ *Company*: [Vast Development Method](https://getbible.net)
 + *Author*: [Llewellyn van der Merwe](mailto:joomla@vdm.io)
-+ *Name*: [Dailyscripture](https://www.vdm.io/)
-+ *First Build*: 22nd October, 2015
-+ *Last Build*: 5th April, 2023
-+ *Version*: 1.1.4
++ *Name*: [Dailyscripture](https://getbible.net)
++ *First Build*: 3rd December, 2015
++ *Last Build*: 26th July, 2023
++ *Version*: 1.1.5
 + *Copyright*: Copyright (C) 2015. All Rights Reserved
 + *License*: GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
 
