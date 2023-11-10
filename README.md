@@ -1,4 +1,4 @@
-# Dailyscripture (1.1.5)
+# Dailyscripture (1.2.0)
 
 Display the daily scripture from [https://git.vdm.dev/christian/daily-scripture](https://git.vdm.dev/christian/daily-scripture).
 
@@ -10,8 +10,8 @@ Display the daily scripture from [https://git.vdm.dev/christian/daily-scripture]
 + *Author*: [Llewellyn van der Merwe](mailto:joomla@vdm.io)
 + *Name*: [Dailyscripture](https://getbible.net)
 + *First Build*: 3rd December, 2015
-+ *Last Build*: 9th November, 2023
-+ *Version*: 1.1.5
++ *Last Build*: 10th November, 2023
++ *Version*: 1.2.0
 + *Copyright*: Copyright (C) 2015. All Rights Reserved
 + *License*: GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
 

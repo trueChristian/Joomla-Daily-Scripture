@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="4" client="site" method="upgrade">
 	<name>MOD_DAILYSCRIPTURE</name>
-	<creationDate>9th November, 2023</creationDate>
+	<creationDate>10th November, 2023</creationDate>
 	<author>Llewellyn van der Merwe</author>
 	<authorEmail>joomla@vdm.io</authorEmail>
 	<authorUrl>https://getbible.net</authorUrl>
 	<copyright>Copyright (C) 2015. All Rights Reserved</copyright>
 	<license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
-	<version>1.1.5</version>
+	<version>1.2.0</version>
 	<description>MOD_DAILYSCRIPTURE_XML_DESCRIPTION</description>
 
 	<!-- Scripts to run on installation -->
@@ -105,23 +105,41 @@
 			step="10"
 			showon="show_comments:1"
 		/>
-		<!-- Link Field. Type: Radio. (joomla) -->
+		<!-- Link Field. Type: List. (joomla) -->
 		<field
-			type="radio"
+			type="list"
 			name="link"
 			label="MOD_DAILYSCRIPTURE_LINK_LABEL"
 			description="MOD_DAILYSCRIPTURE_LINK_DESCRIPTION"
-			class="btn-group btn-group-yesno"
+			class="list_class"
+			multiple="false"
 			default="1"
 			showon="type:1">
 			<!-- Option Set. -->
 			<option value="2">
 				MOD_DAILYSCRIPTURE_GETBIBLE</option>
+			<option value="3">
+				MOD_DAILYSCRIPTURE_LOCAL_GETBIBLE</option>
 			<option value="1">
 				MOD_DAILYSCRIPTURE_TELEGRAM</option>
 			<option value="0">
 				MOD_DAILYSCRIPTURE_NONE</option>
 		</field>
+		<!-- Local_link Field. Type: Text. (joomla) -->
+		<field
+			type="text"
+			name="local_link"
+			label="MOD_DAILYSCRIPTURE_LOCAL_LINK_LABEL"
+			size="50"
+			maxlength="150"
+			description="MOD_DAILYSCRIPTURE_LOCAL_LINK_DESCRIPTION"
+			class="text_area"
+			filter="STRING"
+			message="MOD_DAILYSCRIPTURE_LOCAL_LINK_MESSAGE"
+			hint="MOD_DAILYSCRIPTURE_LOCAL_LINK_HINT"
+			autocomplete="on"
+			showon="type:1[AND]link:3"
+		/>
 		<!-- Width Field. Type: Number. (joomla) -->
 		<field
 			type="number"

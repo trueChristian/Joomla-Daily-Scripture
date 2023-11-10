@@ -147,6 +147,10 @@ class ModDailyScriptureHelper
 		{
 			return $this->scripture->{$key};
 		}
+		elseif ($this->type == 1 && $key === 'local_link')
+		{
+			return $this->getLocalLink();
+		}
 		elseif ($this->type == 2 && $key === 'telegram')
 		{
 			return $this->getTelegram();
@@ -157,6 +161,25 @@ class ModDailyScriptureHelper
 		}
 
 		return null;
+	}
+
+	/**
+	 * get the local link
+	 *
+	 * @return  string|null
+	 *
+	 * @since   1.2
+	 */
+	protected function getLocalLink(): ?string
+	{
+		if (($link = $this->params->get('local_link')) === null ||
+			empty($this->version) || empty($this->book) ||
+			empty($this->chapter) || empty($this->verse))
+		{
+			return null;
+		}
+
+		return "$link/{$this->version}/{$this->book}/{$this->chapter}/{$this->verse}";
 	}
 
 	/**
