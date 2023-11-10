@@ -27,7 +27,7 @@ defined('_JEXEC') or die('Restricted access');
 		<li><b><?php echo $scripture->nr; ?></b> <?php echo $scripture->text; ?></li>
 	<?php endforeach; ?>
 	</ul>
-	<?php if ($params->get('link', 3) == 2): ?>
+	<?php if ($params->get('link', 2) == 3): ?>
 		<a href="<?php echo $today->local_link; ?>"><?php echo $today->date; ?></a>
 	<?php elseif ($params->get('link', 2) == 2): ?>
 		<a href="<?php echo $today->getbible; ?>" target="_blank"><?php echo $today->date; ?></a>
