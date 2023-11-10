@@ -172,9 +172,9 @@ class ModDailyScriptureHelper
 	 */
 	protected function getLocalLink(): ?string
 	{
-		if (($link = $this->params->get('local_link')) === null ||
-			empty($this->version) || empty($this->book) ||
-			empty($this->chapter) || empty($this->verse))
+		$link = $this->params->get('local_link');
+
+		if (empty($link))
 		{
 			return null;
 		}
