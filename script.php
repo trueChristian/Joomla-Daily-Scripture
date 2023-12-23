@@ -18,6 +18,11 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filesystem\Folder;
+
 /**
  * Dailyscripture script file.
  *
@@ -37,7 +42,7 @@ class mod_DailyScriptureInstallerScript
 	public function preflight($route, $adapter)
 	{
 		// get application
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// the default for both install and update
 		$jversion = new JVersion();
