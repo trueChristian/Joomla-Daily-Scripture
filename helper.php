@@ -224,7 +224,7 @@ class ModDailyScriptureHelper
 			$userpic = $this->getUserPic();
 
 			// set the script
-			$this->telegram = "<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-post=\"daily_scripture/$id\" data-width=\"$width%\"${color}${userpic}${dark}></script>";
+			$this->telegram = "<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-post=\"daily_scripture/$id\" data-width=\"$width%\"{$color}{$userpic}{$dark}></script>";
 		}
 	}
 
@@ -273,7 +273,7 @@ class ModDailyScriptureHelper
 			$colorful = $this->getCommentColorful();
 
 			// set the script
-			$this->comments = "<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-discussion=\"daily_scripture/$id\" data-comments-limit=\"$limit\"${colorful}${height}${color}${dark}></script>";
+			$this->comments = "<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-discussion=\"daily_scripture/$id\" data-comments-limit=\"$limit\"{$colorful}{$height}{$color}{$dark}></script>";
 		}
 	}
 
