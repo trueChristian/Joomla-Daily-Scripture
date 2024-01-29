@@ -25,7 +25,7 @@ JLoader::register('ModDailyScriptureHelper', __DIR__ . '/helper.php');
 $today = new ModDailyScriptureHelper($params);
 
 // get the module class sfx (local)
-$moduleclass_sfx = htmlspecialchars($params->get('moduleclass_sfx'), ENT_COMPAT, 'UTF-8');
+$moduleclass_sfx = htmlspecialchars($params->get('moduleclass_sfx', ''), ENT_COMPAT, 'UTF-8');
 
 // load the default Tmpl
 require JModuleHelper::getLayoutPath('mod_dailyscripture', $params->get('layout', 'default'));
