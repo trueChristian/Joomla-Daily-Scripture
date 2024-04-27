@@ -17,6 +17,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Language\Text;
 
 
 ?>
@@ -45,5 +46,5 @@ defined('_JEXEC') or die('Restricted access');
 		<?php echo $today->comments; ?>
 	<?php endif; ?>
 <?php else: ?>
-	<?php echo JText::_('MOD_DAILYSCRIPTURE_THERE_WAS_AN_ERROR_LOADING_THE_DAILY_SCRIPTURE_PLEASE_TRY_AGAIN_LATTER'); ?>
+	<?php echo Text::_('MOD_DAILYSCRIPTURE_THERE_WAS_AN_ERROR_LOADING_THE_DAILY_SCRIPTURE_PLEASE_TRY_AGAIN_LATTER'); ?>
 <?php endif; ?>
