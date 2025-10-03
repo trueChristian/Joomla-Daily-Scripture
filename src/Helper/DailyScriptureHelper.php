@@ -14,13 +14,16 @@
     @license    GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
 
 /------------------------------------------------------------------------------------------------------*/
+namespace TrueChristianBible\Module\DailyScripture\Site\Helper;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\Registry\Registry;
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-use Joomla\Registry\Registry;
-
-class ModDailyScriptureHelper
+class DailyScriptureHelper
 {
 	/**
 	 * Params

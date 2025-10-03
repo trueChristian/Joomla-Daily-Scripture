@@ -14,18 +14,37 @@
     @license    GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
 
 /------------------------------------------------------------------------------------------------------*/
+namespace TrueChristianBible\Module\DailyScripture\Site\Dispatcher;
+
+use Joomla\CMS\Dispatcher\AbstractModuleDispatcher;
+use Joomla\CMS\Helper\HelperFactoryAwareInterface;
+use Joomla\CMS\Helper\HelperFactoryAwareTrait;
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// Include the helper functions only once
-JLoader::register('ModDailyScriptureHelper', __DIR__ . '/helper.php');
+/**
+ * Dispatcher class for Dailyscripture
+ *
+ * @since  5.3.0
+ */
+class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareInterface
+{
+	use HelperFactoryAwareTrait;
 
-// get the daily scripture
-$today = new ModDailyScriptureHelper($params);
+	/**
+	 * Returns the layout data.
+	 *
+	 * @return  array
+	 *
+	 * @since   5.3.0
+	 */
+	protected function getLayoutData(): array
+	{
+		$data = parent::getLayoutData();
 
-// get the module class sfx (local)
-$moduleclass_sfx = htmlspecialchars($params->get('moduleclass_sfx', ''), ENT_COMPAT, 'UTF-8');
+		$data['helper'] = $this->getHelperFactory()->getHelper('DailyScriptureHelper', $data);
 
-// load the default Tmpl
-require JModuleHelper::getLayoutPath('mod_dailyscripture', $params->get('layout', 'default'));
+		return $data;
+	}
+}

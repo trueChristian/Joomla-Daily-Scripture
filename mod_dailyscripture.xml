@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="5.0" client="site" method="upgrade">
 	<name>MOD_DAILYSCRIPTURE</name>
-	<creationDate>29th July, 2024</creationDate>
+	<creationDate>3rd October, 2025</creationDate>
 	<author>Llewellyn van der Merwe</author>
 	<authorEmail>joomla@vdm.io</authorEmail>
 	<authorUrl>https://getbible.net</authorUrl>
 	<copyright>Copyright (C) 2015. All Rights Reserved</copyright>
 	<license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
 	<version>1.2.3</version>
+	<namespace path="src">TrueChristianBible\Module\DailyScripture</namespace>
 	<description>MOD_DAILYSCRIPTURE_XML_DESCRIPTION</description>
 
 	<!-- Scripts to run on installation -->
@@ -15,30 +16,24 @@
 
 	<!-- Language files -->
 	<languages folder="language">
-		<language tag="en-GB">en-GB/en-GB.mod_dailyscripture.ini</language>
-		<language tag="en-GB">en-GB/en-GB.mod_dailyscripture.sys.ini</language>
+		<language tag="en-GB">en-GB/mod_dailyscripture.ini</language>
+		<language tag="en-GB">en-GB/mod_dailyscripture.sys.ini</language>
 	</languages>
 
-	<!-- Model files -->
+	<!-- Module files -->
 	<files>
-		<filename module="mod_dailyscripture">mod_dailyscripture.php</filename>
+		<folder module="mod_dailyscripture">services</folder>
 		<filename>README.md</filename>
-		<filename>helper.php</filename>
 		<filename>index.html</filename>
 		<folder>language</folder>
-		<folder>fields</folder>
-		<folder>rules</folder>
+		<folder>src</folder>
 		<folder>tmpl</folder>
 	</files>
 
-	<!-- Config parameter -->
+	<!-- Config parameters -->
 	<config>
 	<fields name="params">
-	<!-- default paths of basic fieldset points to the module -->
-	<fieldset name="basic" label="basic"
-		addrulepath="/modules/mod_dailyscripture/rules"
-		addfieldpath="/modules/mod_dailyscripture/fields"
-	>
+	<fieldset name="basic" label="basic">
 		<!-- Type Field. Type: List. (joomla) -->
 		<field
 			type="list"
@@ -216,14 +211,44 @@
 				MOD_DAILYSCRIPTURE_DARK_THEME</option>
 		</field>
 	</fieldset>
-	<!-- default paths of info fieldset points to the module -->
-	<fieldset name="info" label="MOD_DAILYSCRIPTURE_DAILY_SCRIPTURE"
-		addrulepath="/modules/mod_dailyscripture/rules"
-		addfieldpath="/modules/mod_dailyscripture/fields"
-	>
+	<fieldset name="info" label="MOD_DAILYSCRIPTURE_DAILY_SCRIPTURE">
 		<!-- Daily_scripture_note Field. Type: Note. A None Database Field. (joomla) -->
 		<field type="note" name="daily_scripture_note" label="MOD_DAILYSCRIPTURE_DAILY_SCRIPTURE_NOTE_LABEL" description="MOD_DAILYSCRIPTURE_DAILY_SCRIPTURE_NOTE_DESCRIPTION" heading="h4" class="alert alert-success daily_scripture_note" />
 	</fieldset>
+		<fieldset name="advanced">
+			<field
+				name="layout"
+				type="modulelayout"
+				label="JFIELD_ALT_LAYOUT_LABEL"
+				class="form-select"
+				validate="moduleLayout"
+			/>
+			<field
+				name="moduleclass_sfx"
+				type="textarea"
+				label="MOD_DAILYSCRIPTURE_FIELD_MODULECLASS_SFX_LABEL"
+				rows="3"
+				validate="CssIdentifier"
+			/>
+			<field
+				name="owncache"
+				type="list"
+				label="MOD_DAILYSCRIPTURE_FIELD_CACHING_LABEL"
+				default="1"
+				filter="integer"
+				validate="options"
+				>
+				<option value="1">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">MOD_DAILYSCRIPTURE_FIELD_VALUE_NOCACHING</option>
+			</field>
+			<field
+				name="cache_time"
+				type="number"
+				label="MOD_DAILYSCRIPTURE_FIELD_CACHE_TIME_LABEL"
+				default="900"
+				filter="integer"
+			/>
+		</fieldset>
 	</fields>
 	</config>
 </extension>
