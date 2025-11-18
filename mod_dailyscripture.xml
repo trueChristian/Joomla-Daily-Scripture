@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="5.0" client="site" method="upgrade">
 	<name>MOD_DAILYSCRIPTURE</name>
-	<creationDate>22nd October, 2025</creationDate>
+	<creationDate>18th November, 2025</creationDate>
 	<author>Llewellyn van der Merwe</author>
 	<authorEmail>joomla@vdm.io</authorEmail>
-	<authorUrl>https://getbible.net</authorUrl>
+	<authorUrl>https://getbible.life</authorUrl>
 	<copyright>Copyright (C) 2015. All Rights Reserved</copyright>
 	<license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
 	<version>1.2.3</version>
