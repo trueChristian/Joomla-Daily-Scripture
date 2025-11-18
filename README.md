@@ -9,7 +9,7 @@ Display the daily scripture from [https://git.vdm.dev/christian/daily-scripture]
 + *Company*: [Vast Development Method](https://getbible.life)
 + *Author*: [Llewellyn van der Merwe](mailto:joomla@vdm.io)
 + *Name*: [Dailyscripture](https://getbible.life)
-+ *First Build*: 2015-12-03 01:42:15
++ *First Build*: 3rd December, 2015
 + *Last Build*: 18th November, 2025
 + *Version*: 1.2.3
 + *Copyright*: Copyright (C) 2015. All Rights Reserved
